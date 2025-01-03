@@ -2,29 +2,54 @@ const { Router } = require("express");
 const fs = require("fs");
 const path = require("path");
 const router = new Router();
-const users = require("../data/users.json");
+
+// Carregar o arquivo JSON de usuários
+const filePath = path.join(__dirname, "../data/users.json");
 
 router.get("/users", (req, res) => {
-  const filePath = path.join(__dirname, "../data/users.json");
-  fs.readFile(filePath, "utf8", (err, users) => {
+  fs.readFile(filePath, "utf8", (err, data) => {
     if (err) {
-      return res.status(404).send("Recurso requisitado não encontrado");
+      return res
+        .status(404)
+        .json({ error: "Recurso requisitado não encontrado" });
     }
-    res.json(users);
+
+    try {
+      const users = JSON.parse(data);
+      res.json(users);
+    } catch (parseError) {
+      return res
+        .status(500)
+        .json({ error: "Erro ao processar dados do arquivo JSON" });
+    }
   });
-});
-router.get("/users", (req, res) => {
-  res.send(users);
 });
 
 router.get("/users/:id", (req, res) => {
-  const { _id } = req.params;
+  const { id } = req.params;
 
-  if (!users[_id]) {
-    res.status(404).send({ error: "ID do usuário não encontrado" });
-    return;
-  }
-  res.send(users[_id]);
+  fs.readFile(filePath, "utf8", (err, data) => {
+    if (err) {
+      return res
+        .status(404)
+        .json({ error: "Recurso requisitado não encontrado" });
+    }
+
+    try {
+      const users = JSON.parse(data);
+      const user = users.find((user) => user.id == id);
+
+      if (!user) {
+        return res.status(404).json({ error: "ID do usuário não encontrado" });
+      }
+
+      res.json(user);
+    } catch (parseError) {
+      return res
+        .status(500)
+        .json({ error: "Erro ao processar dados do arquivo JSON" });
+    }
+  });
 });
 
 module.exports = router;
