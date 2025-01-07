@@ -3,7 +3,6 @@ const fs = require("fs");
 const path = require("path");
 const router = new Router();
 
-// Carregar o arquivo JSON de usuários
 const filePath = path.join(__dirname, "../data/users.json");
 
 router.get("/users", (req, res) => {
@@ -37,7 +36,7 @@ router.get("/users/:id", (req, res) => {
 
     try {
       const users = JSON.parse(data);
-      const user = users.find((user) => user.id == id);
+      const user = users.find((user) => user._id === id);
 
       if (!user) {
         return res.status(404).json({ error: "ID do usuário não encontrado" });
