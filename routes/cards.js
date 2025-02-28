@@ -1,27 +1,17 @@
-const { Router } = require("express");
-const fs = require("fs");
-const path = require("path");
-const router = new Router();
+const router = require("express").Router();
 
-const filePath = path.join(__dirname, "../data/card.json");
+const {
+  getCards,
+  deleteCardById,
+  createCard,
+  likeCard,
+  dislikeCard,
+} = require("../controllers/cards");
 
-router.get("/card", (req, res) => {
-  fs.readFile(filePath, "utf8", (err, data) => {
-    if (err) {
-      return res
-        .status(400)
-        .json({ error: "Recurso requisitado não encontrado" });
-    }
-
-    try {
-      const cards = JSON.parse(data);
-      res.json(cards);
-    } catch (parseError) {
-      return res
-        .status(500)
-        .json({ error: "Erro ao processar dados do arquivo JSON" });
-    }
-  });
-});
+router.get("/cards", getCards);
+router.post("/cards", createCard);
+router.delete("/cards/:cardId", deleteCardById);
+router.put("/cards/:cardId/likes", likeCard);
+router.delete("/cards/:cardId/likes", dislikeCard);
 
 module.exports = router;
