@@ -8,7 +8,6 @@ Este é um projeto simples de uma API que fornece informações sobre usuários 
 
 - **Node.js**: Ambiente de execução JavaScript do lado do servidor.
 - **Express.js**: Framework minimalista para construção de APIs em Node.js.
-- **File System (fs)**: Para ler e manipular arquivos JSON contendo dados dos usuários e cartões.
 
 ## Funcionalidades
 
@@ -19,6 +18,7 @@ Esta API oferece as seguintes rotas para interação:
 - **`GET /users`**  
   Retorna a lista completa de usuários cadastrados.  
   **Exemplo de resposta:**
+
   ```json
 
   ```
